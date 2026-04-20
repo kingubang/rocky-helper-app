@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主色调：紫色系（与 HTML 页面一致） -->
+    <color name="primary">#6C5CE7</color>
+    <color name="primary_variant">#5A4BD1</color>
+    <color name="on_primary">#FFFFFF</color>
+
+    <color name="secondary">#A29BFE</color>
+    <color name="secondary_variant">#8B83F0</color>
+    <color name="on_secondary">#FFFFFF</color>
+
+    <color name="background">#1A1B2E</color>
+    <color name="surface">#232540</color>
+    <color name="surface_variant">#2A2D4A</color>
+    <color name="on_background">#DFE6E9</color>
+    <color name="on_surface">#DFE6E9</color>
+    <color name="on_surface_variant">#B2BEC3</color>
+
+    <color name="danger">#FF6B6B</color>
+    <color name="success">#00B894</color>
+    <color name="warning">#FDCB6E</color>
+
+    <!-- 渐变色 -->
+    <color name="gradient_start">#6C5CE7</color>
+    <color name="gradient_end">#E84393</color>
+
+    <!-- 通知栏 -->
+    <color name="notification_bg">#232540</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+</resources>
