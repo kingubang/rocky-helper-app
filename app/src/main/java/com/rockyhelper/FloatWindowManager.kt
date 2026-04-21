@@ -3,6 +3,7 @@ package com.rockyhelper
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.PixelFormat
 import android.os.Build
 import android.util.DisplayMetrics
@@ -58,12 +59,15 @@ class FloatWindowManager(private val context: Context) {
     private var windowInitialX = 0
     private var windowInitialY = 0
 
-    // 屏幕尺寸
-    private val screenWidth: Int
-    private val screenHeight: Int
+    // 屏幕尺寸（使用真实尺寸，避免旋转干扰）
+    private val realScreenWidth: Int
+    private val realScreenHeight: Int
+    private val isLandscape: Boolean
+
+    // 悬浮球尺寸
     private val ballSize: Int // dp 转像素
 
-    // 悬浮窗尺寸
+    // 悬浮窗尺寸（自适应）
     private val windowWidth: Int
     private val windowHeight: Int
 
@@ -71,12 +75,26 @@ class FloatWindowManager(private val context: Context) {
         val displayMetrics = DisplayMetrics()
         @Suppress("DEPRECATION")
         windowManager.defaultDisplay.getMetrics(displayMetrics)
-        screenWidth = displayMetrics.widthPixels
-        screenHeight = displayMetrics.heightPixels
+        realScreenWidth = displayMetrics.widthPixels
+        realScreenHeight = displayMetrics.heightPixels
 
-        ballSize = dpToPx(54)
-        windowWidth = dpToPx(380)
-        windowHeight = dpToPx(640)
+        // 检测当前是否横屏
+        isLandscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        ballSize = dpToPx(48)
+
+        if (isLandscape) {
+            // 横屏：正方形悬浮窗，适配屏幕高度的70%，但不超过420dp
+            val maxSquare = dpToPx(420)
+            val heightBased = (realScreenHeight * 0.70).toInt()
+            val side = if (heightBased > maxSquare) maxSquare else heightBased
+            windowWidth = side
+            windowHeight = side
+        } else {
+            // 竖屏：紧凑矩形，宽度85%屏幕，高度70%屏幕
+            windowWidth = (realScreenWidth * 0.88).toInt().coerceAtMost(dpToPx(400))
+            windowHeight = (realScreenHeight * 0.65).toInt().coerceAtMost(dpToPx(520))
+        }
     }
 
     /**
@@ -126,8 +144,8 @@ class FloatWindowManager(private val context: Context) {
         ).apply {
             gravity = Gravity.TOP or Gravity.START
             // 初始位置：屏幕右侧中间
-            x = screenWidth - ballSize - dpToPx(8)
-            y = screenHeight / 2 - ballSize / 2
+            x = realScreenWidth - ballSize - dpToPx(8)
+            y = realScreenHeight / 2 - ballSize / 2
         }
         floatBallParams = params
 
@@ -161,8 +179,8 @@ class FloatWindowManager(private val context: Context) {
                         params.x = initialX + dx.toInt()
                         params.y = initialY + dy.toInt()
                         // 限制在屏幕范围内
-                        params.x = params.x.coerceIn(0, screenWidth - ballSize)
-                        params.y = params.y.coerceIn(0, screenHeight - ballSize)
+                        params.x = params.x.coerceIn(0, realScreenWidth - ballSize)
+                        params.y = params.y.coerceIn(0, realScreenHeight - ballSize)
                         windowManager.updateViewLayout(ballView, params)
                     }
                     true
@@ -198,10 +216,10 @@ class FloatWindowManager(private val context: Context) {
      */
     private fun snapToEdge(params: WindowManager.LayoutParams) {
         val centerX = params.x + ballSize / 2
-        val targetX = if (centerX < screenWidth / 2) {
+        val targetX = if (centerX < realScreenWidth / 2) {
             dpToPx(4) // 吸附到左边
         } else {
-            screenWidth - ballSize - dpToPx(4) // 吸附到右边
+            realScreenWidth - ballSize - dpToPx(4) // 吸附到右边
         }
 
         val animator = ValueAnimator.ofInt(params.x, targetX)
@@ -285,6 +303,10 @@ class FloatWindowManager(private val context: Context) {
             // 启用自适应
             setInitialScale(100)
 
+            // 根据屏幕方向通知页面
+            val orientationValue = if (isLandscape) "landscape" else "portrait"
+            evaluateJavascript("window.__ROCKY_ORIENTATION__ = '$orientationValue'", null)
+
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
 
@@ -316,8 +338,8 @@ class FloatWindowManager(private val context: Context) {
         ).apply {
             gravity = Gravity.TOP or Gravity.START
             // 居中显示
-            x = (screenWidth - windowWidth) / 2
-            y = (screenHeight - windowHeight) / 2
+            x = (realScreenWidth - windowWidth) / 2
+            y = (realScreenHeight - windowHeight) / 2
         }
         floatWindowParams = params
 
@@ -349,9 +371,9 @@ class FloatWindowManager(private val context: Context) {
                     val dx = event.rawX - windowLastX
                     val dy = event.rawY - windowLastY
                     params.x = (windowInitialX + dx).toInt()
-                        .coerceIn(0, screenWidth - windowWidth)
+                        .coerceIn(0, realScreenWidth - windowWidth)
                     params.y = (windowInitialY + dy).toInt()
-                        .coerceIn(0, screenHeight - windowHeight)
+                        .coerceIn(0, realScreenHeight - windowHeight)
                     try {
                         windowManager.updateViewLayout(floatWindowView, params)
                     } catch (e: Exception) {
