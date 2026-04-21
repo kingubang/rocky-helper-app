@@ -16,6 +16,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 
@@ -90,8 +91,8 @@ class FloatWindowManager(private val context: Context) {
     private fun showFloatBallInternal() {
         if (floatBallView != null) return
 
-        // 创建悬浮球视图
-        val ballView = View(context).apply {
+        // 创建悬浮球视图（使用 FrameLayout 以支持添加子 View）
+        val ballView = FrameLayout(context).apply {
             setBackgroundResource(R.drawable.bg_float_ball)
             elevation = dpToPx(8).toFloat()
         }
@@ -104,9 +105,9 @@ class FloatWindowManager(private val context: Context) {
             gravity = Gravity.CENTER
             setTextColor(0xFFFFFFFF.toInt())
         }
-        ballView.addView(emojiView, LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+        ballView.addView(emojiView, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
         ))
 
         val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -321,7 +322,8 @@ class FloatWindowManager(private val context: Context) {
         floatWindowParams = params
 
         // 点击WebView区域时切换为可聚焦，允许输入
-        webView.setOnTouchListener { _, event ->
+        val webViewInstance = webView
+        webViewInstance?.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 try {
                     params.flags = params.flags and WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE.inv()
