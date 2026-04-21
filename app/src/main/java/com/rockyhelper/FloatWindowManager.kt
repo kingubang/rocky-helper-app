@@ -84,14 +84,11 @@ class FloatWindowManager(private val context: Context) {
         ballSize = dpToPx(48)
 
         if (isLandscape) {
-            // 横屏：正方形悬浮窗，适配屏幕高度的70%，但不超过420dp
-            val maxSquare = dpToPx(420)
-            val heightBased = (realScreenHeight * 0.70).toInt()
-            val side = if (heightBased > maxSquare) maxSquare else heightBased
-            windowWidth = side
-            windowHeight = side
+            // 横屏：铺满屏幕宽度，上下各留 16dp 边距
+            windowWidth = realScreenWidth
+            windowHeight = realScreenHeight - dpToPx(32)
         } else {
-            // 竖屏：紧凑矩形，宽度85%屏幕，高度70%屏幕
+            // 竖屏：紧凑矩形，宽度88%屏幕，高度70%屏幕
             windowWidth = (realScreenWidth * 0.88).toInt().coerceAtMost(dpToPx(400))
             windowHeight = (realScreenHeight * 0.65).toInt().coerceAtMost(dpToPx(520))
         }
@@ -337,9 +334,15 @@ class FloatWindowManager(private val context: Context) {
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            // 居中显示
-            x = (realScreenWidth - windowWidth) / 2
-            y = (realScreenHeight - windowHeight) / 2
+            if (isLandscape) {
+                // 横屏：全宽，上下居中（各留16dp）
+                x = 0
+                y = (realScreenHeight - windowHeight) / 2
+            } else {
+                // 竖屏：居中
+                x = (realScreenWidth - windowWidth) / 2
+                y = (realScreenHeight - windowHeight) / 2
+            }
         }
         floatWindowParams = params
 
@@ -359,29 +362,40 @@ class FloatWindowManager(private val context: Context) {
 
         // 点击标题栏区域时切换回不可聚焦，避免影响游戏
         headerLayout.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    windowLastX = event.rawX
-                    windowLastY = event.rawY
-                    windowInitialX = params.x
-                    windowInitialY = params.y
-                    true
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    val dx = event.rawX - windowLastX
-                    val dy = event.rawY - windowLastY
-                    params.x = (windowInitialX + dx).toInt()
-                        .coerceIn(0, realScreenWidth - windowWidth)
-                    params.y = (windowInitialY + dy).toInt()
-                        .coerceIn(0, realScreenHeight - windowHeight)
+            if (isLandscape) {
+                // 横屏全宽模式不拖动，只处理聚焦切换
+                if (event.action == MotionEvent.ACTION_DOWN) {
                     try {
+                        params.flags = params.flags or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                         windowManager.updateViewLayout(floatWindowView, params)
-                    } catch (e: Exception) {
-                        // view 可能已被移除
-                    }
-                    true
+                    } catch (e: Exception) { }
                 }
-                else -> false
+                true
+            } else {
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        windowLastX = event.rawX
+                        windowLastY = event.rawY
+                        windowInitialX = params.x
+                        windowInitialY = params.y
+                        true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val dx = event.rawX - windowLastX
+                        val dy = event.rawY - windowLastY
+                        params.x = (windowInitialX + dx).toInt()
+                            .coerceIn(0, realScreenWidth - windowWidth)
+                        params.y = (windowInitialY + dy).toInt()
+                            .coerceIn(0, realScreenHeight - windowHeight)
+                        try {
+                            windowManager.updateViewLayout(floatWindowView, params)
+                        } catch (e: Exception) {
+                            // view 可能已被移除
+                        }
+                        true
+                    }
+                    else -> false
+                }
             }
         }
 

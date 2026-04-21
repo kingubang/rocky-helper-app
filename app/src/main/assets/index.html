@@ -34,64 +34,118 @@ html, body {
 }
 html { position:fixed; width:100%; height:100%; overflow:hidden; }
 
-/* 主布局 */
+/* 主布局 - 横屏全宽 */
 .app-container {
   display: flex; flex-direction: column;
   height: 100vh; height: 100dvh;
   overflow: hidden;
 }
 
-/* Tab栏 - 紧凑型 */
-.tab-bar {
-  display: flex; padding: 4px 6px; gap: 3px;
+/* 顶部标题栏 - 超紧凑 */
+.top-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
   background: var(--bg2);
   border-bottom: 1px solid rgba(255,255,255,0.06);
   flex-shrink: 0;
 }
+.top-bar .logo { font-size: 16px; }
+.top-bar .title { font-size: 13px; font-weight: 700; color: var(--accent2); }
+
+/* Tab栏 - 横向排列 */
+.tab-bar {
+  display: flex; padding: 3px 10px; gap: 2px;
+  flex-shrink: 0;
+}
 .tab-btn {
-  flex: 1; padding: 6px 2px; border: none;
-  border-radius: 8px; background: transparent;
-  color: var(--text2); font-size: 11px; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 5px 14px; border: none;
+  border-radius: 6px; background: transparent;
+  color: var(--text2); font-size: 12px; cursor: pointer;
   transition: background 0.15s;
 }
-.tab-btn .tab-icon { font-size: 16px; }
 .tab-btn.active { background: var(--accent); color: #fff; }
 
-/* 内容区 */
-.panel-content {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding: 8px;
+/* 横屏内容区 - 左右分栏 */
+.content-area {
+  flex: 1; display: flex; overflow: hidden;
+  min-height: 0;
 }
-.panel-content::-webkit-scrollbar { width: 2px; }
-.panel-content::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
-.tab-page { display: none; }
-.tab-page.active { display: block; }
 
-/* 搜索框 - 紧凑 */
-.search-box { position: relative; margin-bottom: 8px; }
-.search-box input {
-  width: 100%; padding: 8px 10px 8px 32px;
-  border-radius: 8px; border: 1px solid var(--bg3);
-  background: var(--bg2); color: var(--text); font-size: 13px;
-  outline: none;
-  -webkit-appearance: none;
-  -webkit-border-radius: 8px;
+/* 左侧面板 - 搜索和列表 */
+.left-panel {
+  width: 260px; flex-shrink: 0;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column;
+  overflow: hidden;
 }
-.search-box input:focus { border-color: var(--accent); }
-.search-box input::placeholder { color: var(--text2); }
-.search-box .search-icon {
-  position: absolute; left: 10px; top: 50%;
-  transform: translateY(-50%); color: var(--text2); font-size: 14px;
+.left-panel .search-box {
+  padding: 6px; flex-shrink: 0;
+}
+.left-panel .search-box input {
+  width: 100%; padding: 7px 10px 7px 30px;
+  border-radius: 6px; border: 1px solid var(--bg3);
+  background: var(--bg2); color: var(--text); font-size: 13px;
+  outline: none; -webkit-appearance: none;
+}
+.left-panel .search-box input:focus { border-color: var(--accent); }
+.left-panel .search-box input::placeholder { color: var(--text2); }
+.left-panel .search-box .search-icon {
+  position: relative; float: left;
+  margin-left: 8px; margin-top: -22px;
+  color: var(--text2); font-size: 13px;
   pointer-events: none;
 }
+.left-panel .filter-row {
+  display: flex; gap: 2px; flex-wrap: wrap;
+  padding: 0 6px 6px; flex-shrink: 0;
+}
+.filter-tag {
+  padding: 3px 6px; border-radius: 4px;
+  border: 1px solid var(--bg3); background: transparent;
+  color: var(--text2); font-size: 9px; cursor: pointer;
+}
+.filter-tag.active { border-color: var(--accent); background: rgba(108,92,231,0.2); color: var(--text); }
+.left-panel .pet-scroll {
+  flex: 1; overflow-y: auto; padding: 0 6px 6px;
+  -webkit-overflow-scrolling: touch;
+}
+.left-panel .pet-scroll::-webkit-scrollbar { width: 2px; }
+.left-panel .pet-scroll::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
 
-/* 属性标签 - 紧凑 */
+/* 右侧面板 - 详情/克制/推荐 */
+.right-panel {
+  flex: 1; overflow-y: auto; padding: 8px 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.right-panel::-webkit-scrollbar { width: 2px; }
+.right-panel::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 2px; }
+
+/* 精灵卡片 - 紧凑列表 */
+.pet-card {
+  background: var(--bg2); border-radius: 8px;
+  padding: 6px 8px; margin-bottom: 4px;
+  border: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer; transition: border-color 0.15s;
+}
+.pet-card:active { border-color: var(--accent); background: var(--bg3); }
+.pet-card .pet-header {
+  display: flex; align-items: center; gap: 6px;
+}
+.pet-card .pet-avatar {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--bg3); display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.pet-card .pet-info { flex: 1; min-width: 0; }
+.pet-card .pet-name { font-size: 12px; font-weight: 600; }
+.pet-card .pet-no { font-size: 9px; color: var(--text2); }
+.pet-card .pet-types { display: flex; gap: 2px; margin-top: 1px; }
+
+/* 属性标签 */
 .type-tag {
-  display: inline-block; padding: 2px 6px;
-  border-radius: 4px; font-size: 10px; font-weight: 600;
-  color: #fff; min-width: 24px; text-align: center;
+  display: inline-block; padding: 1px 5px;
+  border-radius: 3px; font-size: 9px; font-weight: 600;
+  color: #fff; min-width: 20px; text-align: center;
 }
 .type-normal { background: var(--normal); color: #333; }
 .type-fire { background: var(--fire); }
@@ -112,264 +166,221 @@ html { position:fixed; width:100%; height:100%; overflow:hidden; }
 .type-light { background: var(--light); color: #333; }
 .type-dragon { background: var(--dragon); }
 
-/* 精灵卡片 - 紧凑型 */
-.pet-card {
-  background: var(--bg2); border-radius: 10px;
-  padding: 8px 10px; margin-bottom: 6px;
-  border: 1px solid rgba(255,255,255,0.04);
-  cursor: pointer;
-  transition: border-color 0.15s;
+/* 精灵详情 - 右侧展示 */
+.pet-detail { padding: 4px 0; }
+.pet-detail .pd-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 10px;
 }
-.pet-card:active { border-color: var(--accent); background: var(--bg3); }
-.pet-card .pet-header {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+.pet-detail .pd-avatar {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--bg2); display: flex; align-items: center; justify-content: center;
+  font-size: 30px; flex-shrink: 0;
+  border: 1px solid var(--bg3);
 }
-.pet-card .pet-avatar {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: var(--bg3); display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0;
-}
-.pet-card .pet-info { flex: 1; min-width: 0; }
-.pet-card .pet-name { font-size: 13px; font-weight: 600; }
-.pet-card .pet-no { font-size: 10px; color: var(--text2); }
-.pet-card .pet-types { display: flex; gap: 3px; margin-top: 2px; }
-.pet-card .pet-stats {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
+.pet-detail .pd-name { font-size: 18px; font-weight: 700; }
+.pet-detail .pd-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.pet-detail .pd-stats {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px;
+  margin-bottom: 10px;
 }
 .stat-item {
-  text-align: center; padding: 4px 2px;
-  background: var(--bg); border-radius: 6px;
+  text-align: center; padding: 6px 2px;
+  background: var(--bg2); border-radius: 6px;
 }
-.stat-item .stat-val { font-size: 12px; font-weight: 700; color: var(--accent2); }
+.stat-item .stat-val { font-size: 13px; font-weight: 700; color: var(--accent2); }
 .stat-item .stat-label { font-size: 9px; color: var(--text2); }
-
-/* 精灵详情模态框 - 全屏覆盖 */
-.modal-overlay {
-  position: fixed; inset: 0; z-index: 100;
-  background: rgba(0,0,0,0.8);
-  display: none; align-items: center; justify-content: center;
-  -webkit-overflow-scrolling: touch;
+.pet-detail .pd-desc {
+  font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px;
 }
-.modal-overlay.show { display: flex; }
-.modal {
-  width: 95%; max-width: 400px; max-height: 90vh;
-  background: var(--bg); border-radius: 14px;
-  overflow-y: auto; padding: 14px;
-  border: 1px solid rgba(108,92,231,0.3);
+.pet-detail .pd-section {
+  margin-bottom: 8px;
 }
-.modal .close-btn {
-  float: right; width: 28px; height: 28px;
-  border-radius: 50%; border: none;
-  background: var(--bg3); color: var(--text2);
-  cursor: pointer; font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
+.pet-detail .pd-section-title {
+  font-size: 11px; font-weight: 600; margin-bottom: 4px;
 }
-.modal .modal-title {
-  font-size: 17px; font-weight: 700; margin-bottom: 2px;
+.pet-detail .pd-build {
+  background: var(--bg2); border-radius: 8px; padding: 10px;
+  border-left: 3px solid var(--success);
 }
-.modal .modal-sub { font-size: 11px; color: var(--text2); margin-bottom: 10px; }
+.pet-detail .pd-build-title {
+  font-size: 12px; font-weight: 600; color: var(--success); margin-bottom: 4px;
+}
+.pet-detail .pd-build-text {
+  font-size: 12px; color: var(--text2); line-height: 1.6;
+}
 .evo-chain {
   display: flex; align-items: center; gap: 6px;
-  flex-wrap: wrap; margin-bottom: 10px;
+  flex-wrap: wrap; margin-bottom: 8px;
 }
 .evo-node {
-  background: var(--bg2); border-radius: 8px; padding: 5px 10px;
+  background: var(--bg2); border-radius: 6px; padding: 4px 10px;
   text-align: center; border: 1px solid var(--bg3);
 }
 .evo-node .evo-name { font-size: 11px; font-weight: 600; }
 .evo-node .evo-no { font-size: 9px; color: var(--text2); }
 .evo-arrow { color: var(--accent2); font-size: 14px; }
 
-/* 属性克制矩阵 - 紧凑 */
+/* 属性克制 - 双栏并排 */
 .type-grid {
   display: grid;
-  grid-template-columns: 28px repeat(9, 1fr);
-  gap: 1px; margin-bottom: 8px;
+  grid-template-columns: 26px repeat(9, 1fr);
+  gap: 1px; margin-bottom: 6px;
 }
 .type-cell {
-  min-height: 22px; border-radius: 3px;
+  min-height: 20px; border-radius: 2px;
   display: flex; align-items: center; justify-content: center;
   font-size: 8px; font-weight: 700; cursor: pointer;
   padding: 1px;
 }
-.type-cell.header { font-size: 9px; border-radius: 4px; color: #fff; }
+.type-cell.header { font-size: 9px; border-radius: 3px; color: #fff; }
 .dmg-2 { background: rgba(0, 184, 148, 0.7); color: #fff; }
 .dmg-1 { background: rgba(255,255,255,0.05); color: var(--text2); }
 .dmg-05 { background: rgba(253, 107, 107, 0.5); color: #fff; }
 .dmg-0 { background: rgba(99,110,114,0.4); color: #999; }
 
-/* 防御端查询 - 紧凑 */
 .def-query {
-  background: var(--bg2); border-radius: 10px; padding: 10px; margin-bottom: 8px;
+  background: var(--bg2); border-radius: 8px; padding: 8px; margin-bottom: 8px;
 }
-.def-query h3 { font-size: 12px; margin-bottom: 8px; color: var(--accent2); }
-.def-types-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.def-query h3 { font-size: 12px; margin-bottom: 6px; color: var(--accent2); }
+.def-types-row { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 6px; }
 .def-type-btn {
-  padding: 5px 10px; border-radius: 6px;
+  padding: 4px 8px; border-radius: 5px;
   border: 2px solid var(--bg3); background: transparent;
-  color: var(--text); font-size: 11px; cursor: pointer;
-  min-height: 28px; min-width: 28px;
-  transition: border-color 0.15s;
+  color: var(--text); font-size: 10px; cursor: pointer;
+  min-height: 26px; min-width: 26px;
 }
 .def-type-btn.selected { border-color: var(--accent); background: rgba(108,92,231,0.2); }
-.def-result { display: flex; flex-wrap: wrap; gap: 4px; }
+.def-result { display: flex; flex-wrap: wrap; gap: 3px; }
 .def-result-item {
-  display: flex; align-items: center; gap: 3px;
-  padding: 4px 8px; border-radius: 6px;
-  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; gap: 2px;
+  padding: 3px 6px; border-radius: 4px;
+  font-size: 10px; font-weight: 600;
 }
 .multiplier-2 { background: rgba(0,184,148,0.2); color: var(--success); }
 .multiplier-05 { background: rgba(253,107,107,0.2); color: var(--danger); }
 .multiplier-0 { background: rgba(99,110,114,0.2); color: #999; }
 .multiplier-1 { background: rgba(255,255,255,0.05); color: var(--text2); }
 
-/* 培养推荐 - 紧凑 */
-.tier-section { margin-bottom: 12px; }
+/* 培养推荐 - 卡片横排 */
+.rec-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 6px;
+}
+.tier-section { margin-bottom: 10px; }
 .tier-header {
-  display: flex; align-items: center; gap: 6px;
-  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
 }
-.tier-badge {
-  padding: 2px 8px; border-radius: 6px;
-  font-size: 11px; font-weight: 700;
-}
+.tier-badge { padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; }
 .tier-t0 { background: var(--warn); color: #333; }
 .tier-t1 { background: var(--success); color: #fff; }
 .tier-t2 { background: var(--accent); color: #fff; }
-.tier-t3 { background: var(--text2); color: #fff; }
 .rec-card {
-  background: var(--bg2); border-radius: 10px;
-  padding: 8px 10px; margin-bottom: 6px;
-  border-left: 3px solid var(--accent);
+  background: var(--bg2); border-radius: 8px;
+  padding: 8px; border-left: 3px solid var(--accent);
 }
 .rec-card .rec-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .rec-card .rec-name { font-size: 12px; font-weight: 700; }
-.rec-card .rec-pos { font-size: 10px; color: var(--text2); }
-.rec-card .rec-desc { font-size: 11px; color: var(--text2); margin-bottom: 4px; line-height: 1.5; }
-.rec-card .rec-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.rec-card .rec-pos { font-size: 9px; color: var(--text2); }
+.rec-card .rec-desc { font-size: 10px; color: var(--text2); margin-bottom: 4px; line-height: 1.4; }
+.rec-card .rec-tags { display: flex; gap: 3px; flex-wrap: wrap; }
 .rec-tag {
-  padding: 2px 6px; border-radius: 4px;
+  padding: 1px 5px; border-radius: 3px;
   background: var(--bg3); font-size: 9px; color: var(--text2);
 }
 
-/* 筛选标签 - 紧凑 */
-.filter-row {
-  display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 8px;
-}
-.filter-tag {
-  padding: 4px 8px; border-radius: 6px;
-  border: 1px solid var(--bg3); background: transparent;
-  color: var(--text2); font-size: 10px; cursor: pointer;
-  min-height: 24px;
-  transition: background 0.15s;
-}
-.filter-tag.active { border-color: var(--accent); background: rgba(108,92,231,0.2); color: var(--text); }
-
-/* 提示 - 紧凑 */
 .tip-box {
-  background: rgba(108,92,231,0.15); border-radius: 8px;
-  padding: 6px 8px; margin-bottom: 8px;
-  font-size: 10px; color: var(--accent2); line-height: 1.5;
+  background: rgba(108,92,231,0.15); border-radius: 6px;
+  padding: 5px 8px; margin-bottom: 8px;
+  font-size: 10px; color: var(--accent2); line-height: 1.4;
 }
 
-/* 首页 - 精简 */
-.intro-page { padding: 8px 0; }
-.intro-page .logo { font-size: 36px; margin-bottom: 6px; }
-.intro-page h2 { font-size: 16px; color: var(--accent2); margin-bottom: 4px; }
-.intro-page p { font-size: 11px; color: var(--text2); line-height: 1.4; margin-bottom: 10px; }
-.feature-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-  text-align: left; margin-bottom: 10px;
+/* 占位提示 */
+.placeholder-hint {
+  display: flex; align-items: center; justify-content: center;
+  height: 100%; color: var(--text2); font-size: 13px;
+  text-align: center; line-height: 1.6;
 }
-.feature-item {
-  background: var(--bg2); border-radius: 10px; padding: 10px;
-}
-.feature-item .fi-icon { font-size: 20px; margin-bottom: 3px; }
-.feature-item .fi-title { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
-.feature-item .fi-desc { font-size: 9px; color: var(--text2); line-height: 1.3; }
 </style>
 </head>
 <body>
 
 <div class="app-container">
-  <!-- Tab栏 -->
+  <!-- 顶部标题 + Tab -->
+  <div class="top-bar">
+    <span class="logo">🔮</span>
+    <span class="title">洛克百宝箱</span>
+    <div style="flex:1"></div>
+  </div>
   <div class="tab-bar">
-    <button class="tab-btn active" data-tab="pokedex">
-      <span class="tab-icon">📖</span><span>图鉴</span>
-    </button>
-    <button class="tab-btn" data-tab="typeChart">
-      <span class="tab-icon">⚔️</span><span>克制</span>
-    </button>
-    <button class="tab-btn" data-tab="recommend">
-      <span class="tab-icon">⭐</span><span>推荐</span>
-    </button>
+    <button class="tab-btn active" data-tab="pokedex">📖 图鉴</button>
+    <button class="tab-btn" data-tab="typeChart">⚔️ 克制</button>
+    <button class="tab-btn" data-tab="recommend">⭐ 推荐</button>
   </div>
 
-  <div class="panel-content">
-    <!-- 精灵图鉴（默认Tab） -->
-    <div class="tab-page active" id="page-pokedex">
+  <!-- 内容区 -->
+  <div class="content-area">
+    <!-- 左侧：搜索+列表（图鉴Tab才显示） -->
+    <div class="left-panel" id="leftPanel">
       <div class="search-box">
+        <input type="text" id="petSearch" placeholder="搜索精灵..." autocomplete="off">
         <span class="search-icon">🔍</span>
-        <input type="text" id="petSearch" placeholder="搜索精灵名称、编号..." autocomplete="off" autocorrect="off" autocapitalize="off">
       </div>
       <div class="filter-row" id="typeFilter"></div>
-      <div id="petList"></div>
+      <div class="pet-scroll" id="petList"></div>
     </div>
 
-    <!-- 属性克制 -->
-    <div class="tab-page" id="page-typeChart">
-      <div class="tip-box">
-        🟢克制×2 | 🔴抵抗×0.5 | ⬛无效×0
+    <!-- 右侧：详情/内容 -->
+    <div class="right-panel" id="rightPanel">
+      <!-- 图鉴详情 -->
+      <div class="tab-page active" id="page-pokedex">
+        <div class="placeholder-hint" id="detailPlaceholder">👆 点击左侧精灵查看详情</div>
+        <div class="pet-detail" id="petDetail" style="display:none;"></div>
       </div>
-      <div id="typeGrid"></div>
-      <div class="def-query">
-        <h3>🛡️ 选属性查弱点/抗性（可多选）</h3>
-        <div class="def-types-row" id="defTypeRow"></div>
-        <div class="def-result" id="defResult">
-          <span style="color:var(--text2);font-size:11px;">👆 点击属性标签</span>
+      <!-- 属性克制 -->
+      <div class="tab-page" id="page-typeChart" style="display:none;">
+        <div class="tip-box">🟢克制×2 | 🔴抵抗×0.5 | ⬛无效×0</div>
+        <div id="typeGrid"></div>
+        <div class="def-query">
+          <h3>🛡️ 选属性查弱点/抗性</h3>
+          <div class="def-types-row" id="defTypeRow"></div>
+          <div class="def-result" id="defResult">
+            <span style="color:var(--text2);font-size:10px;">👆 点击属性标签</span>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- 培养推荐 -->
-    <div class="tab-page" id="page-recommend">
-      <div class="tip-box">
-        ⭐ 2026年4月数据，资源有限优先T0
+      <!-- 培养推荐 -->
+      <div class="tab-page" id="page-recommend" style="display:none;">
+        <div class="tip-box">⭐ 2026年4月数据，资源有限优先T0</div>
+        <div id="recommendList"></div>
       </div>
-      <div id="recommendList"></div>
     </div>
   </div>
-</div>
-
-<!-- 精灵详情模态框 -->
-<div class="modal-overlay" id="petModal">
-  <div class="modal" id="petModalContent"></div>
 </div>
 
 <script>
 // ==================== 数据 ====================
-
-const TYPES = ['普通','火','水','草','电','冰','武','毒','地','岩','飞行','虫','钢','萌','恶','幽','光','龙'];
-const TYPE_CLASS = {
+var TYPES = ['普通','火','水','草','电','冰','武','毒','地','岩','飞行','虫','钢','萌','恶','幽','光','龙'];
+var TYPE_CLASS = {
   '普通':'normal','火':'fire','水':'water','草':'grass','电':'elec','冰':'ice',
   '武':'fight','毒':'poison','地':'ground','岩':'rock','飞行':'flying','虫':'bug',
   '钢':'steel','萌':'cute','恶':'dark','幽':'phantom','光':'light','龙':'dragon'
 };
-const TYPE_EMOJI = {
+var TYPE_EMOJI = {
   '普通':'⭐','火':'🔥','水':'💧','草':'🌿','电':'⚡','冰':'❄️',
   '武':'👊','毒':'☠️','地':'🏔️','岩':'🪨','飞行':'🦋','虫':'🐛',
   '钢':'⚙️','萌':'🎀','恶':'🌑','幽':'👻','光':'✨','龙':'🐉'
 };
-const TYPE_ABBR = {
+var TYPE_ABBR = {
   '普通':'普','火':'火','水':'水','草':'草','电':'电','冰':'冰',
   '武':'武','毒':'毒','地':'地','岩':'岩','飞行':'飞','虫':'虫',
   '钢':'钢','萌':'萌','恶':'恶','幽':'幽','光':'光','龙':'龙'
 };
 
-const TYPE_CHART = {
+var TYPE_CHART = {
   '普通': {'岩':0.5,'钢':0.5,'萌':0.5,'武':1,'普通':1},
   '火':   {'草':2,'虫':2,'钢':2,'冰':2,'水':0.5,'火':0.5,'岩':0.5,'地':0.5,'龙':0.5},
   '水':   {'火':2,'地':2,'岩':2,'草':0.5,'水':0.5,'龙':0.5,'钢':0.5},
@@ -390,208 +401,143 @@ const TYPE_CHART = {
   '龙':   {'龙':2,'钢':0.5},
 };
 
-const PETS = [
+var PETS = [
   {id:'001',name:'迪莫',type:['光'],hp:95,atk:80,def:85,spa:100,spd:90,spe:75,total:525,tier:'T1',desc:'洛克标志性精灵，洗出恶血脉后质变达T0。光属性技能无视克制。',evo:['001:迪莫'],recBuild:'推荐性格：固执/开朗 | 加点：攻击+速度 | 核心：光之耀斑、圣光守护'},
   {id:'002',name:'喵喵',type:['普通'],hp:65,atk:66,def:49,spa:62,spd:65,spe:33,total:370,tier:'T2',desc:'普通御三家初始形态，进化后提升显著。',evo:['002:喵喵','003:喵呜','004:魔力猫'],recBuild:''},
   {id:'003',name:'喵呜',type:['普通'],hp:80,atk:82,def:60,spa:78,spd:78,spe:50,total:490,tier:'T2',desc:'喵喵进化形态，各方面属性提升。',evo:['002:喵喵','003:喵呜','004:魔力猫'],recBuild:''},
-  {id:'004',name:'魔力猫',type:['普通'],hp:95,atk:100,def:75,spa:95,spd:90,spe:58,total:613,tier:'T2',desc:'喵喵最终形态。地区形态"叶冕魔力猫"总种族值649。',evo:['002:喵喵','003:喵呜','004:魔力猫'],recBuild:''},
+  {id:'004',name:'魔力猫',type:['普通'],hp:95,atk:100,def:75,spa:95,spd:90,spe:58,total:613,tier:'T2',desc:'喵喵最终形态。"叶冕魔力猫"总种族值649。',evo:['002:喵喵','003:喵呜','004:魔力猫'],recBuild:''},
   {id:'005',name:'火花',type:['火'],hp:60,atk:84,def:56,spa:37,spd:65,spe:66,total:368,tier:'T2',desc:'火系御三家初始形态。',evo:['005:火花','006:焰火','007:火神'],recBuild:''},
   {id:'006',name:'焰火',type:['火'],hp:75,atk:100,def:68,spa:50,spd:80,spe:82,total:490,tier:'T2',desc:'火花进化形态。',evo:['005:火花','006:焰火','007:火神'],recBuild:''},
-  {id:'007',name:'火神',type:['火'],hp:90,atk:120,def:80,spa:65,spd:95,spe:63,total:613,tier:'T1',desc:'火系御三家最终形态，高物攻输出。进化"烈火战神"总种族值672。',evo:['005:火花','006:焰火','007:火神'],recBuild:'推荐性格：固执 | 加点：物攻+速度 | 核心：烈焰冲击、爆燃'},
+  {id:'007',name:'火神',type:['火'],hp:90,atk:120,def:80,spa:65,spd:95,spe:63,total:613,tier:'T1',desc:'火系御三家最终形态，高物攻。"烈火战神"总种族值672。',evo:['005:火花','006:焰火','007:火神'],recBuild:'推荐性格：固执 | 加点：物攻+速度 | 核心：烈焰冲击、爆燃'},
   {id:'008',name:'水蓝蓝',type:['水'],hp:70,atk:62,def:56,spa:80,spd:65,spe:55,total:388,tier:'T2',desc:'水系御三家初始形态。',evo:['008:水蓝蓝','009:波波拉','010:水灵'],recBuild:''},
   {id:'010',name:'水灵',type:['水'],hp:90,atk:85,def:75,spa:110,spd:85,spe:68,total:613,tier:'T1',desc:'水系御三家最终形态，高魔攻。',evo:['008:水蓝蓝','009:波波拉','010:水灵'],recBuild:'推荐性格：保守 | 加点：魔攻+速度 | 核心：水流冲击、潮汐之力'},
-  {id:'041',name:'奇丽草',type:['草'],hp:65,atk:62,def:56,spa:80,spd:65,spe:55,total:383,tier:'T1',desc:'草系T0级PVE之王！近乎无限续航，零消耗释放技能。',evo:['041:奇丽草','042:奇丽叶','043:奇丽花'],recBuild:'推荐性格：保守/温和 | 加点：魔攻+生命 | 核心：进化之力、氧输送、叶绿光束'},
-  {id:'043',name:'奇丽花',type:['草'],hp:95,atk:85,def:80,spa:120,spd:80,spe:53,total:613,tier:'T0',desc:'草系PVE之王，自洽回蓝特性永动续航。',evo:['041:奇丽草','042:奇丽叶','043:奇丽花'],recBuild:'推荐性格：保守 | 加点：魔攻+生命 | 连招：进化之力→氧输送→叶绿光束→光能聚集'},
-  {id:'050',name:'罗隐',type:['地','武'],hp:100,atk:115,def:110,spa:60,spd:75,spe:60,total:620,tier:'T0',desc:'PVE/PVP万金油！超高物攻物防，自带减伤和回血。',evo:['050:罗隐'],recBuild:'推荐性格：固执/勇敢 | 加点：物攻+物防 | 核心：均势、贪婪、鸣沙陷阱'},
-  {id:'077',name:'燃薪虫',type:['火','虫'],hp:80,atk:75,def:65,spa:105,spd:85,spe:90,total:600,tier:'T0',desc:'PVE核心！灼烧层数指数级增长，纯机制输出。',evo:['077:燃薪虫'],recBuild:'推荐性格：内敛/急躁 | 加点：魔攻+速度 | 连招：引燃(叠10层)→充分燃烧'},
-  {id:'080',name:'酷拉',type:['水','翼'],hp:75,atk:90,def:65,spa:85,spd:110,spe:95,total:620,tier:'T0',desc:'翼王克星！技能机制完美克制圣羽翼王。',evo:['080:酷拉'],recBuild:'推荐性格：开朗/固执 | 加点：物攻+速度 | 连招：热身运动→三连破→闪击折返'},
+  {id:'041',name:'奇丽草',type:['草'],hp:65,atk:62,def:56,spa:80,spd:65,spe:55,total:383,tier:'T1',desc:'草系T0级PVE之王！近乎无限续航。',evo:['041:奇丽草','042:奇丽叶','043:奇丽花'],recBuild:'推荐性格：保守/温和 | 加点：魔攻+生命 | 核心：进化之力、氧输送、叶绿光束'},
+  {id:'043',name:'奇丽花',type:['草'],hp:95,atk:85,def:80,spa:120,spd:80,spe:53,total:613,tier:'T0',desc:'草系PVE之王，自洽回蓝永动续航。',evo:['041:奇丽草','042:奇丽叶','043:奇丽花'],recBuild:'推荐性格：保守 | 加点：魔攻+生命 | 连招：进化之力→氧输送→叶绿光束→光能聚集'},
+  {id:'050',name:'罗隐',type:['地','武'],hp:100,atk:115,def:110,spa:60,spd:75,spe:60,total:620,tier:'T0',desc:'PVE/PVP万金油！超高物攻物防，自带减伤回血。',evo:['050:罗隐'],recBuild:'推荐性格：固执/勇敢 | 加点：物攻+物防 | 核心：均势、贪婪、鸣沙陷阱'},
+  {id:'077',name:'燃薪虫',type:['火','虫'],hp:80,atk:75,def:65,spa:105,spd:85,spe:90,total:600,tier:'T0',desc:'PVE核心！灼烧层数指数级增长。',evo:['077:燃薪虫'],recBuild:'推荐性格：内敛/急躁 | 加点：魔攻+速度 | 连招：引燃(叠10层)→充分燃烧'},
+  {id:'080',name:'酷拉',type:['水','翼'],hp:75,atk:90,def:65,spa:85,spd:110,spe:95,total:620,tier:'T0',desc:'翼王克星！完美克制圣羽翼王。',evo:['080:酷拉'],recBuild:'推荐性格：开朗/固执 | 加点：物攻+速度 | 连招：热身运动→三连破→闪击折返'},
   {id:'085',name:'圣羽翼王',type:['翼'],hp:85,atk:125,def:70,spa:80,spd:125,spe:85,total:670,tier:'T0',desc:'PVP核心，125速度+125物攻双高。',evo:['085:圣羽翼王'],recBuild:'推荐性格：开朗/急躁 | 加点：物攻+速度 | 核心：热身运动、三连破、乘胜追击'},
-  {id:'090',name:'帕尔萨斯',type:['幽','恶'],hp:90,atk:105,def:85,spa:90,spd:80,spe:70,total:620,tier:'T0',desc:'幽+恶双属性，输出稳定，配队核心。',evo:['090:帕尔萨斯'],recBuild:'推荐性格：固执 | 加点：物攻+速度 | 核心：暗影冲击、幽冥之力'},
-  {id:'095',name:'白金独角兽',type:['光'],hp:95,atk:80,def:90,spa:100,spd:85,spe:90,total:640,tier:'T0',desc:'光属性高种族值，兼具输出和辅助。',evo:['095:白金独角兽'],recBuild:'推荐性格：内敛 | 加点：魔攻+生命/速度 | 核心：独角之誓、圣洁之光'},
-  {id:'100',name:'蹦蹦花',type:['草','毒'],hp:75,atk:80,def:70,spa:90,spd:80,spe:85,total:580,tier:'T1',desc:'毒队核心成员，毒伤持续流代表。',evo:['100:蹦蹦花'],recBuild:'推荐性格：冷静 | 加点：魔攻+速度 | 核心：毒素蔓延、花瓣风暴'},
-  {id:'110',name:'星光狮',type:['光','武'],hp:85,atk:120,def:80,spa:70,spd:100,spe:90,total:645,tier:'T1',desc:'物理爆发型，越战越强，适合收割位。',evo:['110:星光狮'],recBuild:'推荐性格：固执/开朗 | 加点：物攻+速度 | 定位：二号位收割'},
-  {id:'120',name:'雪影娃娃',type:['冰','幽'],hp:70,atk:85,def:65,spa:110,spd:95,spe:100,total:625,tier:'T1',desc:'冰+幽双属性法师，冻结控场流核心。',evo:['120:雪影娃娃'],recBuild:'推荐性格：内敛/急躁 | 加点：魔攻+速度 | 核心：冰封之息、幽影之触'},
+  {id:'090',name:'帕尔萨斯',type:['幽','恶'],hp:90,atk:105,def:85,spa:90,spd:80,spe:70,total:620,tier:'T0',desc:'幽+恶双属性，输出稳定。',evo:['090:帕尔萨斯'],recBuild:'推荐性格：固执 | 加点：物攻+速度 | 核心：暗影冲击、幽冥之力'},
+  {id:'095',name:'白金独角兽',type:['光'],hp:95,atk:80,def:90,spa:100,spd:85,spe:90,total:640,tier:'T0',desc:'光属性高种族值，兼具输出辅助。',evo:['095:白金独角兽'],recBuild:'推荐性格：内敛 | 加点：魔攻+生命/速度 | 核心：独角之誓、圣洁之光'},
+  {id:'100',name:'蹦蹦花',type:['草','毒'],hp:75,atk:80,def:70,spa:90,spd:80,spe:85,total:580,tier:'T1',desc:'毒队核心，毒伤持续流代表。',evo:['100:蹦蹦花'],recBuild:'推荐性格：冷静 | 加点：魔攻+速度 | 核心：毒素蔓延、花瓣风暴'},
+  {id:'110',name:'星光狮',type:['光','武'],hp:85,atk:120,def:80,spa:70,spd:100,spe:90,total:645,tier:'T1',desc:'物理爆发型，适合收割位。',evo:['110:星光狮'],recBuild:'推荐性格：固执/开朗 | 加点：物攻+速度 | 定位：二号位收割'},
+  {id:'120',name:'雪影娃娃',type:['冰','幽'],hp:70,atk:85,def:65,spa:110,spd:95,spe:100,total:625,tier:'T1',desc:'冰+幽法师，冻结控场核心。',evo:['120:雪影娃娃'],recBuild:'推荐性格：内敛/急躁 | 加点：魔攻+速度 | 核心：冰封之息、幽影之触'},
   {id:'130',name:'海枝枝',type:['水'],hp:80,atk:75,def:70,spa:95,spd:85,spe:80,total:585,tier:'T2',desc:'前期过渡用水系精灵。',evo:['130:海枝枝'],recBuild:''},
-  {id:'140',name:'龙息帕尔',type:['龙','火'],hp:85,atk:100,def:75,spa:95,spd:90,spe:85,total:630,tier:'T1',desc:'龙+火双属性，高爆发输出。',evo:['140:龙息帕尔'],recBuild:'推荐性格：内敛 | 加点：魔攻+速度 | 核心：龙息烈焰'},
-  {id:'011',name:'鸭吉吉',type:['普通','飞行'],hp:60,atk:55,def:50,spa:50,spd:60,spe:70,total:345,tier:'T5',desc:'多种形态但强度极低，不建议培养。',evo:['011:鸭吉吉'],recBuild:''},
-  {id:'200',name:'空空颅',type:['幽','岩'],hp:80,atk:90,def:85,spa:80,spd:70,spe:75,total:580,tier:'T2',desc:'幽+岩双属性，可进化为夜枭。',evo:['200:空空颅'],recBuild:''},
+  {id:'140',name:'龙息帕尔',type:['龙','火'],hp:85,atk:100,def:75,spa:95,spd:90,spe:85,total:630,tier:'T1',desc:'龙+火双属性，高爆发。',evo:['140:龙息帕尔'],recBuild:'推荐性格：内敛 | 加点：魔攻+速度 | 核心：龙息烈焰'},
+  {id:'011',name:'鸭吉吉',type:['普通','飞行'],hp:60,atk:55,def:50,spa:50,spd:60,spe:70,total:345,tier:'T5',desc:'强度极低，不建议培养。',evo:['011:鸭吉吉'],recBuild:''},
+  {id:'200',name:'空空颅',type:['幽','岩'],hp:80,atk:90,def:85,spa:80,spd:70,spe:75,total:580,tier:'T2',desc:'幽+岩，可进化为夜枭。',evo:['200:空空颅'],recBuild:''},
 ];
 
-const RECOMMEND = [
+var RECOMMEND = [
   {
     tier: 'T0', pets: [
-      {name:'燃薪虫',type:['火','虫'],pos:'PVE核心',desc:'灼烧层数指数增长，纯机制输出，火/地/草三大属性覆盖90%副本。',tags:['必练','PVE','开荒']},
-      {name:'罗隐',type:['地','武'],pos:'PVE/PVP万金油',desc:'超高物攻物防，自带减伤回血，站场能力极强。',tags:['必练','PVE','PVP']},
-      {name:'奇丽花',type:['草'],pos:'草系PVE之王',desc:'无限续航，零消耗释放技能，大幅节省资源。',tags:['必练','PVE','续航']},
-      {name:'圣羽翼王',type:['翼'],pos:'PVP核心',desc:'125速度+125物攻双高，闪击流翼王PVP天梯绝对主力。',tags:['PVP','天梯']},
-      {name:'帕尔萨斯',type:['幽','恶'],pos:'配队核心',desc:'幽+恶双属性输出稳定，主流配队核心。',tags:['PVP','配队']},
-      {name:'白金独角兽',type:['光'],pos:'辅助/输出',desc:'高种族值640，兼具输出辅助，光属性无视克制。',tags:['PVP','PVE']},
+      {name:'燃薪虫',type:['火','虫'],pos:'PVE核心',desc:'灼烧层数指数增长，纯机制输出，火/地/草覆盖90%副本。',tags:['必练','PVE','开荒']},
+      {name:'罗隐',type:['地','武'],pos:'万金油',desc:'超高物攻物防，自带减伤回血，站场能力极强。',tags:['必练','PVE','PVP']},
+      {name:'奇丽花',type:['草'],pos:'PVE之王',desc:'无限续航，零消耗释放技能。',tags:['必练','PVE','续航']},
+      {name:'圣羽翼王',type:['翼'],pos:'PVP核心',desc:'125速+125攻双高，天梯绝对主力。',tags:['PVP','天梯']},
+      {name:'帕尔萨斯',type:['幽','恶'],pos:'配队核心',desc:'幽+恶双属性输出稳定。',tags:['PVP','配队']},
+      {name:'白金独角兽',type:['光'],pos:'辅助/输出',desc:'高种族值640，光属性无视克制。',tags:['PVP','PVE']},
     ]
   },
   {
     tier: 'T1', pets: [
-      {name:'迪莫',type:['光'],pos:'条件T0',desc:'洗出恶血脉后达T0。光属性无视克制。',tags:['需洗血脉']},
-      {name:'火神',type:['火'],pos:'火系输出',desc:'高物攻120，进化"烈火战神"总种族值672。',tags:['输出','进化']},
-      {name:'蹦蹦花',type:['草','毒'],pos:'毒队核心',desc:'毒伤持续流代表精灵。',tags:['PVP','毒队']},
-      {name:'星光狮',type:['光','武'],pos:'收割位',desc:'物理爆发型，越战越强。',tags:['PVP','二号位']},
-      {name:'雪影娃娃',type:['冰','幽'],pos:'控场法师',desc:'冰+幽双属性法师，冻结控场流核心。',tags:['PVP','控场']},
+      {name:'迪莫',type:['光'],pos:'条件T0',desc:'洗出恶血脉后达T0。',tags:['需洗血脉']},
+      {name:'火神',type:['火'],pos:'火系输出',desc:'物攻120，"烈火战神"672种族值。',tags:['输出','进化']},
+      {name:'蹦蹦花',type:['草','毒'],pos:'毒队核心',desc:'毒伤持续流。',tags:['PVP','毒队']},
+      {name:'星光狮',type:['光','武'],pos:'收割位',desc:'物理爆发，越战越强。',tags:['PVP','二号位']},
+      {name:'雪影娃娃',type:['冰','幽'],pos:'控场法师',desc:'冰+幽冻结控场。',tags:['PVP','控场']},
     ]
   }
 ];
 
 // ==================== Tab切换 ====================
-document.querySelectorAll('.tab-btn').forEach(btn => {
+var currentTab = 'pokedex';
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     this.classList.add('active');
-    document.getElementById('page-' + this.dataset.tab).classList.add('active');
-    document.querySelector('.panel-content').scrollTop = 0;
+    currentTab = this.dataset.tab;
+    // 切换右侧页面
+    document.querySelectorAll('.tab-page').forEach(function(p) { p.style.display = 'none'; });
+    document.getElementById('page-' + currentTab).style.display = 'block';
+    // 左侧面板仅在图鉴Tab显示
+    document.getElementById('leftPanel').style.display = (currentTab === 'pokedex') ? 'flex' : 'none';
+    // 滚动到顶部
+    document.getElementById('rightPanel').scrollTop = 0;
   });
 });
 
-// ==================== 属性克制表 ====================
+// ==================== 属性克制 ====================
 function getMultiplier(atkType, defType) {
-  if (TYPE_CHART[atkType] && TYPE_CHART[atkType][defType] !== undefined) {
-    return TYPE_CHART[atkType][defType];
-  }
+  if (TYPE_CHART[atkType] && TYPE_CHART[atkType][defType] !== undefined) return TYPE_CHART[atkType][defType];
   return 1;
 }
 
 function renderTypeGrid() {
   var grid = document.getElementById('typeGrid');
-  var first9 = TYPES.slice(0, 9);
-  var html = '<div class="type-grid">';
-  html += '<div class="type-cell"></div>';
-  for (var i = 0; i < first9.length; i++) {
-    var t = first9[i];
-    html += '<div class="type-cell header type-' + TYPE_CLASS[t] + '" title="' + t + '">' + TYPE_ABBR[t] + '</div>';
-  }
+  var first9 = TYPES.slice(0, 9), last9 = TYPES.slice(9);
+  var html = '<div class="type-grid"><div class="type-cell"></div>';
+  for (var i = 0; i < first9.length; i++) html += '<div class="type-cell header type-' + TYPE_CLASS[first9[i]] + '">' + TYPE_ABBR[first9[i]] + '</div>';
   for (var a = 0; a < TYPES.length; a++) {
-    var atkType = TYPES[a];
-    html += '<div class="type-cell header type-' + TYPE_CLASS[atkType] + '" title="' + atkType + '">' + TYPE_ABBR[atkType] + '</div>';
+    html += '<div class="type-cell header type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPE_ABBR[TYPES[a]] + '</div>';
     for (var d = 0; d < first9.length; d++) {
-      var defType = first9[d];
-      var mult = getMultiplier(atkType, defType);
-      var cls = 'dmg-1';
-      if (mult >= 2) cls = 'dmg-2';
-      else if (mult === 0) cls = 'dmg-0';
-      else if (mult <= 0.5) cls = 'dmg-05';
-      html += '<div class="type-cell ' + cls + '" title="' + atkType + ' → ' + defType + ': ×' + mult + '">' + (mult === 1 ? '' : mult) + '</div>';
+      var m = getMultiplier(TYPES[a], first9[d]), cls = m >= 2 ? 'dmg-2' : m === 0 ? 'dmg-0' : m <= 0.5 ? 'dmg-05' : 'dmg-1';
+      html += '<div class="type-cell ' + cls + '" title="' + TYPES[a] + '→' + first9[d] + ':×' + m + '">' + (m === 1 ? '' : m) + '</div>';
     }
   }
-  html += '</div>';
-  var last9 = TYPES.slice(9);
-  html += '<div class="type-grid">';
-  html += '<div class="type-cell"></div>';
-  for (var i2 = 0; i2 < last9.length; i2++) {
-    var t2 = last9[i2];
-    html += '<div class="type-cell header type-' + TYPE_CLASS[t2] + '" title="' + t2 + '">' + TYPE_ABBR[t2] + '</div>';
-  }
+  html += '</div><div class="type-grid"><div class="type-cell"></div>';
+  for (var i2 = 0; i2 < last9.length; i2++) html += '<div class="type-cell header type-' + TYPE_CLASS[last9[i2]] + '">' + TYPE_ABBR[last9[i2]] + '</div>';
   for (var a2 = 0; a2 < TYPES.length; a2++) {
-    var atkType2 = TYPES[a2];
-    html += '<div class="type-cell header type-' + TYPE_CLASS[atkType2] + '" title="' + atkType2 + '">' + TYPE_ABBR[atkType2] + '</div>';
+    html += '<div class="type-cell header type-' + TYPE_CLASS[TYPES[a2]] + '">' + TYPE_ABBR[TYPES[a2]] + '</div>';
     for (var d2 = 0; d2 < last9.length; d2++) {
-      var defType2 = last9[d2];
-      var mult2 = getMultiplier(atkType2, defType2);
-      var cls2 = 'dmg-1';
-      if (mult2 >= 2) cls2 = 'dmg-2';
-      else if (mult2 === 0) cls2 = 'dmg-0';
-      else if (mult2 <= 0.5) cls2 = 'dmg-05';
-      html += '<div class="type-cell ' + cls2 + '" title="' + atkType2 + ' → ' + defType2 + ': ×' + mult2 + '">' + (mult2 === 1 ? '' : mult2) + '</div>';
+      var m2 = getMultiplier(TYPES[a2], last9[d2]), cls2 = m2 >= 2 ? 'dmg-2' : m2 === 0 ? 'dmg-0' : m2 <= 0.5 ? 'dmg-05' : 'dmg-1';
+      html += '<div class="type-cell ' + cls2 + '" title="' + TYPES[a2] + '→' + last9[d2] + ':×' + m2 + '">' + (m2 === 1 ? '' : m2) + '</div>';
     }
   }
   html += '</div>';
   grid.innerHTML = html;
 }
 
-// 防御端查询
 var selectedDefTypes = [];
 function renderDefQuery() {
-  var row = document.getElementById('defTypeRow');
-  var html = '';
-  for (var i = 0; i < TYPES.length; i++) {
-    var t = TYPES[i];
-    html += '<button class="def-type-btn type-' + TYPE_CLASS[t] + '" data-type="' + t + '" onclick="toggleDefType(this,\'' + t + '\')">' + TYPE_ABBR[t] + '</button>';
-  }
+  var row = document.getElementById('defTypeRow'), html = '';
+  for (var i = 0; i < TYPES.length; i++) html += '<button class="def-type-btn type-' + TYPE_CLASS[TYPES[i]] + '" data-type="' + TYPES[i] + '" onclick="toggleDefType(this,\'' + TYPES[i] + '\')">' + TYPE_ABBR[TYPES[i]] + '</button>';
   row.innerHTML = html;
 }
 function toggleDefType(btn, type) {
   var idx = selectedDefTypes.indexOf(type);
-  if (idx >= 0) {
-    selectedDefTypes.splice(idx, 1);
-    btn.classList.remove('selected');
-  } else {
-    if (selectedDefTypes.length >= 2) {
-      var removed = selectedDefTypes.shift();
-      var oldBtn = document.querySelector('.def-type-btn[data-type="' + removed + '"]');
-      if (oldBtn) oldBtn.classList.remove('selected');
-    }
-    selectedDefTypes.push(type);
-    btn.classList.add('selected');
+  if (idx >= 0) { selectedDefTypes.splice(idx, 1); btn.classList.remove('selected'); }
+  else {
+    if (selectedDefTypes.length >= 2) { var rm = selectedDefTypes.shift(); var ob = document.querySelector('.def-type-btn[data-type="' + rm + '"]'); if (ob) ob.classList.remove('selected'); }
+    selectedDefTypes.push(type); btn.classList.add('selected');
   }
   updateDefResult();
 }
 function updateDefResult() {
   var container = document.getElementById('defResult');
-  if (selectedDefTypes.length === 0) {
-    container.innerHTML = '<span style="color:var(--text2);font-size:11px;">👆 点击属性标签</span>';
-    return;
-  }
+  if (!selectedDefTypes.length) { container.innerHTML = '<span style="color:var(--text2);font-size:10px;">👆 点击属性标签</span>'; return; }
   var results = [];
-  for (var i = 0; i < TYPES.length; i++) {
-    var atkType = TYPES[i];
-    var mult = 1;
-    for (var j = 0; j < selectedDefTypes.length; j++) {
-      mult *= getMultiplier(atkType, selectedDefTypes[j]);
-    }
-    results.push({type: atkType, mult: mult});
-  }
-  results.sort(function(a, b) { return b.mult - a.mult; });
-  var html = '';
-  if (selectedDefTypes.length === 1) {
-    html += '<div style="width:100%;font-size:10px;color:var(--text2);margin-bottom:6px;">🛡️ ' + selectedDefTypes[0] + '属性防御面：</div>';
-  } else {
-    html += '<div style="width:100%;font-size:10px;color:var(--text2);margin-bottom:6px;">🛡️ ' + selectedDefTypes[0] + '+' + selectedDefTypes[1] + '双属性：</div>';
-  }
-  var weaknesses = results.filter(function(r) { return r.mult >= 2; });
-  var immunities = results.filter(function(r) { return r.mult === 0; });
-  var resistances = results.filter(function(r) { return r.mult <= 0.5 && r.mult > 0; });
-  if (weaknesses.length) {
-    html += '<div style="width:100%;font-size:10px;color:var(--danger);margin-bottom:4px;font-weight:600;">⚠️ 弱点</div>';
-    for (var w = 0; w < weaknesses.length; w++) {
-      html += '<div class="def-result-item multiplier-2"><span class="type-tag type-' + TYPE_CLASS[weaknesses[w].type] + '">' + TYPE_ABBR[weaknesses[w].type] + '</span> ×' + weaknesses[w].mult + '</div>';
-    }
-  }
-  if (immunities.length) {
-    html += '<div style="width:100%;font-size:10px;color:#999;margin:6px 0 4px;font-weight:600;">🛡️ 免疫</div>';
-    for (var m = 0; m < immunities.length; m++) {
-      html += '<div class="def-result-item multiplier-0"><span class="type-tag type-' + TYPE_CLASS[immunities[m].type] + '">' + TYPE_ABBR[immunities[m].type] + '</span> ×0</div>';
-    }
-  }
-  if (resistances.length) {
-    html += '<div style="width:100%;font-size:10px;color:var(--success);margin:6px 0 4px;font-weight:600;">✅ 抗性</div>';
-    for (var r = 0; r < resistances.length; r++) {
-      html += '<div class="def-result-item multiplier-05"><span class="type-tag type-' + TYPE_CLASS[resistances[r].type] + '">' + TYPE_ABBR[resistances[r].type] + '</span> ×' + resistances[r].mult + '</div>';
-    }
-  }
+  for (var i = 0; i < TYPES.length; i++) { var mult = 1; for (var j = 0; j < selectedDefTypes.length; j++) mult *= getMultiplier(TYPES[i], selectedDefTypes[j]); results.push({type: TYPES[i], mult: mult}); }
+  results.sort(function(a,b) { return b.mult - a.mult; });
+  var html = '<div style="width:100%;font-size:10px;color:var(--text2);margin-bottom:4px;">🛡️ ' + selectedDefTypes.join('+') + ' 防御面：</div>';
+  var w = results.filter(function(r) { return r.mult >= 2; });
+  var im = results.filter(function(r) { return r.mult === 0; });
+  var re = results.filter(function(r) { return r.mult <= 0.5 && r.mult > 0; });
+  if (w.length) { html += '<div style="font-size:10px;color:var(--danger);font-weight:600;margin-bottom:3px;">⚠️ 弱点</div>'; for (var i = 0; i < w.length; i++) html += '<div class="def-result-item multiplier-2"><span class="type-tag type-' + TYPE_CLASS[w[i].type] + '">' + TYPE_ABBR[w[i].type] + '</span> ×' + w[i].mult + '</div>'; }
+  if (im.length) { html += '<div style="font-size:10px;color:#999;font-weight:600;margin:4px 0 3px;">🛡️ 免疫</div>'; for (var i = 0; i < im.length; i++) html += '<div class="def-result-item multiplier-0"><span class="type-tag type-' + TYPE_CLASS[im[i].type] + '">' + TYPE_ABBR[im[i].type] + '</span> ×0</div>'; }
+  if (re.length) { html += '<div style="font-size:10px;color:var(--success);font-weight:600;margin:4px 0 3px;">✅ 抗性</div>'; for (var i = 0; i < re.length; i++) html += '<div class="def-result-item multiplier-05"><span class="type-tag type-' + TYPE_CLASS[re[i].type] + '">' + TYPE_ABBR[re[i].type] + '</span> ×' + re[i].mult + '</div>'; }
   container.innerHTML = html;
 }
 
 // ==================== 精灵图鉴 ====================
 var currentTypeFilter = '';
 function renderTypeFilter() {
-  var row = document.getElementById('typeFilter');
-  var html = '<button class="filter-tag active" data-type="" onclick="filterByType(this,\'\')">全部</button>';
-  for (var i = 0; i < TYPES.length; i++) {
-    var t = TYPES[i];
-    html += '<button class="filter-tag type-' + TYPE_CLASS[t] + '" data-type="' + t + '" onclick="filterByType(this,\'' + t + '\')">' + TYPE_ABBR[t] + '</button>';
-  }
+  var row = document.getElementById('typeFilter'), html = '<button class="filter-tag active" data-type="" onclick="filterByType(this,\'\')">全部</button>';
+  for (var i = 0; i < TYPES.length; i++) html += '<button class="filter-tag type-' + TYPE_CLASS[TYPES[i]] + '" data-type="' + TYPES[i] + '" onclick="filterByType(this,\'' + TYPES[i] + '\')">' + TYPE_ABBR[TYPES[i]] + '</button>';
   row.innerHTML = html;
 }
 function filterByType(btn, type) {
-  var tags = document.querySelectorAll('.filter-tag');
-  for (var i = 0; i < tags.length; i++) tags[i].classList.remove('active');
+  document.querySelectorAll('.filter-tag').forEach(function(t) { t.classList.remove('active'); });
   btn.classList.add('active');
   currentTypeFilter = type;
   renderPetList();
@@ -600,57 +546,38 @@ function renderPetList() {
   var container = document.getElementById('petList');
   var search = document.getElementById('petSearch').value.toLowerCase();
   var filtered = PETS.filter(function(p) {
-    var matchType = !currentTypeFilter || p.type.indexOf(currentTypeFilter) >= 0;
-    var matchSearch = !search || p.name.toLowerCase().indexOf(search) >= 0 || p.id.indexOf(search) >= 0;
-    return matchType && matchSearch;
+    return (!currentTypeFilter || p.type.indexOf(currentTypeFilter) >= 0) && (!search || p.name.toLowerCase().indexOf(search) >= 0 || p.id.indexOf(search) >= 0);
   });
   var tierOrder = {'T0':0,'T1':1,'T2':2,'T3':3,'T5':4};
-  filtered.sort(function(a, b) { return (tierOrder[a.tier] || 9) - (tierOrder[b.tier] || 9); });
-  if (filtered.length === 0) {
-    container.innerHTML = '<div style="text-align:center;padding:30px 0;color:var(--text2);font-size:12px;">没有找到</div>';
-    return;
-  }
+  filtered.sort(function(a,b) { return (tierOrder[a.tier]||9) - (tierOrder[b.tier]||9); });
+  if (!filtered.length) { container.innerHTML = '<div style="text-align:center;padding:20px 0;color:var(--text2);font-size:11px;">没有找到</div>'; return; }
   var html = '';
   for (var i = 0; i < filtered.length; i++) {
     var p = filtered[i];
-    var tierColor = p.tier === 'T0' ? 'var(--warn)' : p.tier === 'T1' ? 'var(--success)' : p.tier === 'T2' ? 'var(--accent)' : 'var(--text2)';
-    var typeEmojis = '';
-    for (var j = 0; j < p.type.length; j++) typeEmojis += TYPE_EMOJI[p.type[j]];
-    var typeTags = '';
-    for (var k = 0; k < p.type.length; k++) typeTags += '<span class="type-tag type-' + TYPE_CLASS[p.type[k]] + '">' + p.type[k] + '</span>';
-    html += '<div class="pet-card" onclick="showPetDetail(\'' + p.id + '\')">' +
-      '<div class="pet-header">' +
-        '<div class="pet-avatar">' + typeEmojis + '</div>' +
-        '<div class="pet-info">' +
-          '<div class="pet-name">' + p.name + ' <span style="font-size:10px;color:' + tierColor + ';font-weight:700;">' + p.tier + '</span></div>' +
-          '<div class="pet-no">NO.' + p.id + ' · ' + p.total + '</div>' +
-          '<div class="pet-types">' + typeTags + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="pet-stats">' +
-        '<div class="stat-item"><div class="stat-val">' + p.hp + '</div><div class="stat-label">HP</div></div>' +
-        '<div class="stat-item"><div class="stat-val">' + p.atk + '</div><div class="stat-label">物攻</div></div>' +
-        '<div class="stat-item"><div class="stat-val">' + p.def + '</div><div class="stat-label">物防</div></div>' +
-        '<div class="stat-item"><div class="stat-val">' + p.spa + '</div><div class="stat-label">魔攻</div></div>' +
-        '<div class="stat-item"><div class="stat-val">' + p.spd + '</div><div class="stat-label">速度</div></div>' +
-        '<div class="stat-item"><div class="stat-val">' + p.spe + '</div><div class="stat-label">防御</div></div>' +
-      '</div>' +
-    '</div>';
+    var tc = p.tier === 'T0' ? 'var(--warn)' : p.tier === 'T1' ? 'var(--success)' : p.tier === 'T2' ? 'var(--accent)' : 'var(--text2)';
+    var emojis = '', tags = '';
+    for (var j = 0; j < p.type.length; j++) { emojis += TYPE_EMOJI[p.type[j]]; tags += '<span class="type-tag type-' + TYPE_CLASS[p.type[j]] + '">' + p.type[j] + '</span>'; }
+    html += '<div class="pet-card" onclick="showPetDetail(\'' + p.id + '\')"><div class="pet-header"><div class="pet-avatar">' + emojis + '</div><div class="pet-info"><div class="pet-name">' + p.name + ' <span style="font-size:9px;color:' + tc + ';font-weight:700;">' + p.tier + '</span></div><div class="pet-no">' + p.total + '</div><div class="pet-types">' + tags + '</div></div></div></div>';
   }
   container.innerHTML = html;
 }
-
 document.getElementById('petSearch').addEventListener('input', renderPetList);
 
 function showPetDetail(id) {
   var p = null;
-  for (var i = 0; i < PETS.length; i++) {
-    if (PETS[i].id === id) { p = PETS[i]; break; }
-  }
+  for (var i = 0; i < PETS.length; i++) { if (PETS[i].id === id) { p = PETS[i]; break; } }
   if (!p) return;
-  var modal = document.getElementById('petModal');
-  var content = document.getElementById('petModalContent');
-  var tierColor = p.tier === 'T0' ? 'var(--warn)' : p.tier === 'T1' ? 'var(--success)' : p.tier === 'T2' ? 'var(--accent)' : 'var(--text2)';
+  // 高亮左侧选中项
+  document.querySelectorAll('.pet-card').forEach(function(c) { c.style.borderColor = ''; });
+  event.currentTarget.style.borderColor = 'var(--accent)';
+
+  document.getElementById('detailPlaceholder').style.display = 'none';
+  var detail = document.getElementById('petDetail');
+  detail.style.display = 'block';
+  var tc = p.tier === 'T0' ? 'var(--warn)' : p.tier === 'T1' ? 'var(--success)' : p.tier === 'T2' ? 'var(--accent)' : 'var(--text2)';
+  var emojis = '', typeTags = '';
+  for (var j = 0; j < p.type.length; j++) { emojis += TYPE_EMOJI[p.type[j]]; typeTags += '<span class="type-tag type-' + TYPE_CLASS[p.type[j]] + '">' + p.type[j] + '</span> '; }
+
   var evoHtml = '';
   if (p.evo.length > 1) {
     evoHtml = '<div class="evo-chain">';
@@ -661,85 +588,56 @@ function showPetDetail(id) {
     }
     evoHtml += '</div>';
   }
-  var weaknessHtml = '', resistHtml = '', immuneHtml = '';
+
+  var weakHtml = '', resistHtml = '', immuneHtml = '';
   for (var d = 0; d < p.type.length; d++) {
     for (var a = 0; a < TYPES.length; a++) {
-      var mult = getMultiplier(TYPES[a], p.type[d]);
-      if (mult >= 2 && weaknessHtml.indexOf(TYPES[a]) < 0)
-        weaknessHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×' + mult + '</span> ';
-      if (mult <= 0.5 && mult > 0 && resistHtml.indexOf(TYPES[a]) < 0)
-        resistHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×' + mult + '</span> ';
-      if (mult === 0 && immuneHtml.indexOf(TYPES[a]) < 0)
-        immuneHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×0</span> ';
+      var m = getMultiplier(TYPES[a], p.type[d]);
+      if (m >= 2 && weakHtml.indexOf(TYPES[a]) < 0) weakHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×' + m + '</span> ';
+      if (m <= 0.5 && m > 0 && resistHtml.indexOf(TYPES[a]) < 0) resistHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×' + m + '</span> ';
+      if (m === 0 && immuneHtml.indexOf(TYPES[a]) < 0) immuneHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×0</span> ';
     }
   }
-  var typeEmojis = '';
-  for (var j = 0; j < p.type.length; j++) typeEmojis += TYPE_EMOJI[p.type[j]];
-  var typeTags = '';
-  for (var k = 0; k < p.type.length; k++) typeTags += '<span class="type-tag type-' + TYPE_CLASS[p.type[k]] + '">' + p.type[k] + '</span>';
+
   var buildHtml = '';
   if (p.recBuild) {
-    buildHtml = '<div style="background:var(--bg2);border-radius:8px;padding:10px;margin-top:10px;border-left:3px solid var(--success);">' +
-      '<div style="font-size:11px;font-weight:600;color:var(--success);margin-bottom:6px;">📝 培养方案</div>' +
-      '<div style="font-size:11px;color:var(--text2);line-height:1.6;">' + p.recBuild + '</div>' +
-    '</div>';
+    buildHtml = '<div class="pd-build"><div class="pd-build-title">📝 培养方案</div><div class="pd-build-text">' + p.recBuild + '</div></div>';
   }
-  content.innerHTML =
-    '<button class="close-btn" onclick="closeModal()">✕</button>' +
-    '<div style="text-align:center;margin-bottom:10px;">' +
-      '<div style="font-size:36px;margin-bottom:4px;">' + typeEmojis + '</div>' +
-      '<div class="modal-title">' + p.name + '</div>' +
-      '<div class="modal-sub">NO.' + p.id + ' · ' + p.type.join('/') + ' · <span style="color:' + tierColor + ';font-weight:700;">' + p.tier + '</span> · 总' + p.total + '</div>' +
-    '</div>' +
+
+  detail.innerHTML =
+    '<div class="pd-header"><div class="pd-avatar">' + emojis + '</div><div><div class="pd-name">' + p.name + ' <span style="color:' + tc + ';font-size:14px;">' + p.tier + '</span></div><div class="pd-sub">NO.' + p.id + ' · ' + p.type.join('/') + ' · 总种族值 ' + p.total + '</div><div style="margin-top:4px;">' + typeTags + '</div></div></div>' +
     evoHtml +
-    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px;">' +
-      '<div class="stat-item"><div class="stat-val">' + p.hp + '</div><div class="stat-label">HP</div></div>' +
-      '<div class="stat-item"><div class="stat-val">' + p.atk + '</div><div class="stat-label">物攻</div></div>' +
-      '<div class="stat-item"><div class="stat-val">' + p.def + '</div><div class="stat-label">物防</div></div>' +
-      '<div class="stat-item"><div class="stat-val">' + p.spa + '</div><div class="stat-label">魔攻</div></div>' +
-      '<div class="stat-item"><div class="stat-val">' + p.spd + '</div><div class="stat-label">速度</div></div>' +
-      '<div class="stat-item"><div class="stat-val">' + p.spe + '</div><div class="stat-label">防御</div></div>' +
-    '</div>' +
-    '<div style="font-size:11px;color:var(--text2);line-height:1.6;margin-bottom:10px;">' + p.desc + '</div>' +
-    (weaknessHtml ? '<div style="margin-bottom:8px;"><div style="font-size:10px;color:var(--danger);font-weight:600;margin-bottom:4px;">⚠️ 弱点</div>' + weaknessHtml + '</div>' : '') +
-    (immuneHtml ? '<div style="margin-bottom:8px;"><div style="font-size:10px;color:#999;font-weight:600;margin-bottom:4px;">🛡️ 免疫</div>' + immuneHtml + '</div>' : '') +
-    (resistHtml ? '<div style="margin-bottom:8px;"><div style="font-size:10px;color:var(--success);font-weight:600;margin-bottom:4px;">✅ 抗性</div>' + resistHtml + '</div>' : '') +
+    '<div class="pd-stats"><div class="stat-item"><div class="stat-val">' + p.hp + '</div><div class="stat-label">HP</div></div><div class="stat-item"><div class="stat-val">' + p.atk + '</div><div class="stat-label">物攻</div></div><div class="stat-item"><div class="stat-val">' + p.def + '</div><div class="stat-label">物防</div></div><div class="stat-item"><div class="stat-val">' + p.spa + '</div><div class="stat-label">魔攻</div></div><div class="stat-item"><div class="stat-val">' + p.spd + '</div><div class="stat-label">速度</div></div><div class="stat-item"><div class="stat-val">' + p.spe + '</div><div class="stat-label">防御</div></div></div>' +
+    '<div class="pd-desc">' + p.desc + '</div>' +
+    (weakHtml ? '<div class="pd-section"><div class="pd-section-title" style="color:var(--danger);">⚠️ 弱点</div>' + weakHtml + '</div>' : '') +
+    (immuneHtml ? '<div class="pd-section"><div class="pd-section-title" style="color:#999;">🛡️ 免疫</div>' + immuneHtml + '</div>' : '') +
+    (resistHtml ? '<div class="pd-section"><div class="pd-section-title" style="color:var(--success);">✅ 抗性</div>' + resistHtml + '</div>' : '') +
     buildHtml;
-  modal.classList.add('show');
+
+  // 切换到图鉴Tab
+  if (currentTab !== 'pokedex') {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('[data-tab="pokedex"]').classList.add('active');
+    document.querySelectorAll('.tab-page').forEach(function(pg) { pg.style.display = 'none'; });
+    document.getElementById('page-pokedex').style.display = 'block';
+    document.getElementById('leftPanel').style.display = 'flex';
+    currentTab = 'pokedex';
+  }
 }
-function closeModal() {
-  document.getElementById('petModal').classList.remove('show');
-}
-document.getElementById('petModal').addEventListener('click', function(e) {
-  if (e.target === document.getElementById('petModal')) closeModal();
-});
 
 // ==================== 培养推荐 ====================
 function renderRecommend() {
-  var container = document.getElementById('recommendList');
-  var html = '';
+  var container = document.getElementById('recommendList'), html = '';
   for (var g = 0; g < RECOMMEND.length; g++) {
     var group = RECOMMEND[g];
-    html += '<div class="tier-section"><div class="tier-header">' +
-      '<span class="tier-badge tier-' + group.tier.toLowerCase() + '">' + group.tier + '</span>' +
-      '<span style="font-size:11px;color:var(--text2);">' + group.pets.length + '只</span>' +
-    '</div>';
+    html += '<div class="tier-section"><div class="tier-header"><span class="tier-badge tier-' + group.tier.toLowerCase() + '">' + group.tier + '</span><span style="font-size:10px;color:var(--text2);">' + group.pets.length + '只</span></div><div class="rec-grid">';
     for (var i = 0; i < group.pets.length; i++) {
-      var pet = group.pets[i];
-      var typeEmojis = '';
-      for (var j = 0; j < pet.type.length; j++) typeEmojis += TYPE_EMOJI[pet.type[j]];
-      var typeTags = '';
-      for (var k = 0; k < pet.type.length; k++) typeTags += '<span class="type-tag type-' + TYPE_CLASS[pet.type[k]] + '">' + pet.type[k] + '</span>';
-      var tags = '';
+      var pet = group.pets[i], emojis = '', typeTags = '', tags = '';
+      for (var j = 0; j < pet.type.length; j++) { emojis += TYPE_EMOJI[pet.type[j]]; typeTags += '<span class="type-tag type-' + TYPE_CLASS[pet.type[j]] + '">' + pet.type[j] + '</span> '; }
       for (var t = 0; t < pet.tags.length; t++) tags += '<span class="rec-tag">' + pet.tags[t] + '</span>';
-      html += '<div class="rec-card">' +
-        '<div class="rec-header"><div class="rec-name">' + typeEmojis + ' ' + pet.name + '</div><div class="rec-pos">' + pet.pos + '</div></div>' +
-        '<div style="display:flex;gap:3px;margin-bottom:4px;">' + typeTags + '</div>' +
-        '<div class="rec-desc">' + pet.desc + '</div>' +
-        '<div class="rec-tags">' + tags + '</div>' +
-      '</div>';
+      html += '<div class="rec-card"><div class="rec-header"><div class="rec-name">' + emojis + ' ' + pet.name + '</div><div class="rec-pos">' + pet.pos + '</div></div><div style="display:flex;gap:2px;margin-bottom:3px;">' + typeTags + '</div><div class="rec-desc">' + pet.desc + '</div><div class="rec-tags">' + tags + '</div></div>';
     }
-    html += '</div>';
+    html += '</div></div>';
   }
   container.innerHTML = html;
 }
@@ -750,6 +648,28 @@ renderDefQuery();
 renderTypeFilter();
 renderPetList();
 renderRecommend();
+
+// 默认选中第一个T0精灵
+if (PETS.length) showPetDetailById(PETS[0].id);
+function showPetDetailById(id) {
+  var cards = document.querySelectorAll('.pet-card');
+  if (cards.length) { cards[0].style.borderColor = 'var(--accent)'; }
+  document.getElementById('detailPlaceholder').style.display = 'none';
+  var p = PETS[0];
+  if (!p) return;
+  var detail = document.getElementById('petDetail');
+  detail.style.display = 'block';
+  // trigger showPetDetail logic without event
+  var tc = p.tier === 'T0' ? 'var(--warn)' : p.tier === 'T1' ? 'var(--success)' : 'var(--text2)';
+  var emojis = '', typeTags = '';
+  for (var j = 0; j < p.type.length; j++) { emojis += TYPE_EMOJI[p.type[j]]; typeTags += '<span class="type-tag type-' + TYPE_CLASS[p.type[j]] + '">' + p.type[j] + '</span> '; }
+  var evoHtml = '';
+  if (p.evo.length > 1) { evoHtml = '<div class="evo-chain">'; for (var i = 0; i < p.evo.length; i++) { if (i > 0) evoHtml += '→'; var parts = p.evo[i].split(':'); evoHtml += '<div class="evo-node"><div class="evo-name">' + parts[1] + '</div><div class="evo-no">' + parts[0] + '</div></div>'; } evoHtml += '</div>'; }
+  var weakHtml = '', resistHtml = '', immuneHtml = '';
+  for (var d = 0; d < p.type.length; d++) { for (var a = 0; a < TYPES.length; a++) { var m = getMultiplier(TYPES[a], p.type[d]); if (m >= 2 && weakHtml.indexOf(TYPES[a]) < 0) weakHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×' + m + '</span> '; if (m <= 0.5 && m > 0 && resistHtml.indexOf(TYPES[a]) < 0) resistHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×' + m + '</span> '; if (m === 0 && immuneHtml.indexOf(TYPES[a]) < 0) immuneHtml += '<span class="type-tag type-' + TYPE_CLASS[TYPES[a]] + '">' + TYPES[a] + ' ×0</span> '; } }
+  var buildHtml = p.recBuild ? '<div class="pd-build"><div class="pd-build-title">📝 培养方案</div><div class="pd-build-text">' + p.recBuild + '</div></div>' : '';
+  detail.innerHTML = '<div class="pd-header"><div class="pd-avatar">' + emojis + '</div><div><div class="pd-name">' + p.name + ' <span style="color:' + tc + ';font-size:14px;">' + p.tier + '</span></div><div class="pd-sub">NO.' + p.id + ' · ' + p.type.join('/') + ' · 总' + p.total + '</div><div style="margin-top:4px;">' + typeTags + '</div></div></div>' + evoHtml + '<div class="pd-stats"><div class="stat-item"><div class="stat-val">' + p.hp + '</div><div class="stat-label">HP</div></div><div class="stat-item"><div class="stat-val">' + p.atk + '</div><div class="stat-label">物攻</div></div><div class="stat-item"><div class="stat-val">' + p.def + '</div><div class="stat-label">物防</div></div><div class="stat-item"><div class="stat-val">' + p.spa + '</div><div class="stat-label">魔攻</div></div><div class="stat-item"><div class="stat-val">' + p.spd + '</div><div class="stat-label">速度</div></div><div class="stat-item"><div class="stat-val">' + p.spe + '</div><div class="stat-label">防御</div></div></div><div class="pd-desc">' + p.desc + '</div>' + (weakHtml ? '<div class="pd-section"><div class="pd-section-title" style="color:var(--danger);">⚠️ 弱点</div>' + weakHtml + '</div>' : '') + (immuneHtml ? '<div class="pd-section"><div class="pd-section-title" style="color:#999;">🛡️ 免疫</div>' + immuneHtml + '</div>' : '') + (resistHtml ? '<div class="pd-section"><div class="pd-section-title" style="color:var(--success);">✅ 抗性</div>' + resistHtml + '</div>' : '') + buildHtml;
+}
 </script>
 </body>
 </html>
