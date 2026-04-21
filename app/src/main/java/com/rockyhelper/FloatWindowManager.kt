@@ -72,11 +72,12 @@ class FloatWindowManager(private val context: Context) {
     private val windowHeight: Int
 
     init {
-        val displayMetrics = DisplayMetrics()
+        // 使用 getRealMetrics 获取真实屏幕尺寸（包含系统装饰区域之外的全屏尺寸）
+        val realMetrics = DisplayMetrics()
         @Suppress("DEPRECATION")
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        realScreenWidth = displayMetrics.widthPixels
-        realScreenHeight = displayMetrics.heightPixels
+        windowManager.defaultDisplay.getRealMetrics(realMetrics)
+        realScreenWidth = realMetrics.widthPixels
+        realScreenHeight = realMetrics.heightPixels
 
         // 检测当前是否横屏
         isLandscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -84,11 +85,11 @@ class FloatWindowManager(private val context: Context) {
         ballSize = dpToPx(48)
 
         if (isLandscape) {
-            // 横屏：铺满屏幕宽度，上下各留 16dp 边距
+            // 横屏：铺满真实屏幕宽度，高度为真实高度的75%（上下各留12.5%给游戏）
             windowWidth = realScreenWidth
-            windowHeight = realScreenHeight - dpToPx(32)
+            windowHeight = (realScreenHeight * 0.75).toInt()
         } else {
-            // 竖屏：紧凑矩形，宽度88%屏幕，高度70%屏幕
+            // 竖屏：紧凑矩形，宽度88%屏幕，高度65%屏幕
             windowWidth = (realScreenWidth * 0.88).toInt().coerceAtMost(dpToPx(400))
             windowHeight = (realScreenHeight * 0.65).toInt().coerceAtMost(dpToPx(520))
         }
@@ -330,18 +331,19 @@ class FloatWindowManager(private val context: Context) {
             windowWidth,
             windowHeight,
             type,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         ).apply {
-            gravity = Gravity.TOP or Gravity.START
             if (isLandscape) {
-                // 横屏：全宽，上下居中（各留16dp）
+                // 横屏：全宽，垂直居中（使用CENTER让系统自动处理安全区域）
+                gravity = Gravity.CENTER
                 x = 0
-                y = (realScreenHeight - windowHeight) / 2
+                y = 0
             } else {
-                // 竖屏：居中
-                x = (realScreenWidth - windowWidth) / 2
-                y = (realScreenHeight - windowHeight) / 2
+                // 竖屏：水平垂直居中
+                gravity = Gravity.CENTER
+                x = 0
+                y = 0
             }
         }
         floatWindowParams = params
