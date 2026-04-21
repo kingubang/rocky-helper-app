@@ -4,7 +4,7 @@
     <string name="start_float">开启悬浮窗</string>
     <string name="stop_float">关闭悬浮窗</string>
     <string name="float_notification_title">洛克百宝箱</string>
-    <string name="float_notification_text">悬浮窗服务运行中，点击返回</string></string>
+    <string name="float_notification_text">悬浮窗服务运行中，点击返回</string>
     <string name="permission_denied">需要悬浮窗权限才能使用此功能</string>
     <string name="go_to_settings">去设置授权</string>
     <string name="notification_channel_name">悬浮窗服务</string>
